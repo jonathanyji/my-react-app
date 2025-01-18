@@ -61,7 +61,7 @@ workflows:
             - approve-dev
       - deploy:
           requires:
-            - build-frontend
+            - install-dependencies
 
       # Production workflow
       - approve-prod:
@@ -74,4 +74,4 @@ workflows:
             - approve-prod
       - deploy:
           requires:
-            - build-frontend
+            - install-dependencies
