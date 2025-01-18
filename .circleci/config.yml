@@ -55,23 +55,25 @@ workflows:
           type: approval
           requires:
             - install-dependencies
-      - build-frontend:
+      - build-dev-frontend:
           requires:
             - install-dependencies
             - approve-dev
-      - deploy:
+      - deploy-dev:
           requires:
             - install-dependencies
+            - build-dev-frontend
 
       # Production workflow
       - approve-prod:
           type: approval
           requires:
             - install-dependencies
-      - build-frontend:
+      - build-prod-frontend:
           requires:
             - install-dependencies
             - approve-prod
-      - deploy:
+      - deploy-prod:
           requires:
             - install-dependencies
+            - build-prod-frontend
