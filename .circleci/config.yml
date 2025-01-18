@@ -67,13 +67,13 @@ workflows:
             - install-dependencies
             - run-unit-test
       - build-frontend:
-          name: Build frontend dev
+          name: build-frontend-dev
           requires:
             - approve-dev
       - deploy:
           name: Deploy to dev
           requires:
-            - build-frontend
+            - build-frontend-dev
 
       # Development workflow
       - approve-prod:
@@ -82,10 +82,10 @@ workflows:
             - install-dependencies
             - run-unit-test
       - build-frontend:
-          name: Build frontend prod
+          name: build-frontend-prod
           requires:
             - approve-prod
       - deploy:
           name: Deploy to prod
           requires:
-            - build-frontend
+            - build-frontend-prod
