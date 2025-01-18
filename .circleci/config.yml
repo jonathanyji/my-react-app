@@ -1,0 +1,106 @@
+# This config was automatically generated from your source code
+# Stacks detected: deps:node:.
+version: 2.1
+
+orbs:
+  node: circleci/node@5
+
+jobs:
+  install-dependencies:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Install dependencies
+          command: npm i
+
+  run-unit-test:
+    executor: node/default
+    steps:
+      - checkout
+      - run:
+          name: Run unit tests
+          command: echo This command will run unit test
+
+  build-frontend:
+    # Build node project
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm run build
+      - run:
+          name: Create the ~/artifacts directory if it doesn't exist
+          command: mkdir -p ~/artifacts
+      # Copy output to artifacts dir
+      - run:
+          name: Copy artifacts
+          command: cp -R build dist public .output .next .docusaurus ~/artifacts 2>/dev/null || true
+      - store_artifacts:
+          path: ~/artifacts
+          destination: node-build
+
+  deploy:
+    # This is an example deploy job, not actually used by the workflow
+    docker:
+      - image: cimg/base:stable
+    steps:
+      # Replace this with steps to deploy to users
+      - run:
+          name: deploy
+          command: "#e.g. ./deploy.sh"
+
+workflows:
+  build:
+    jobs:
+      - install-dependencies
+      - run-unit-test
+
+      # Development environment workflow
+      - approve-dev:
+          type: approval
+          requires:
+            - install-dependencies
+            - run-unit-test
+      - build-frontend:
+          name: build-frontend-dev
+          requires:
+            - approve-dev
+      - deploy:
+          name: Deploy to dev
+          requires:
+            - build-frontend-dev
+
+      # Test environment workflow
+      - approve-test:
+          type: approval
+          requires:
+            - install-dependencies
+            - run-unit-test
+      - build-frontend:
+          name: build-frontend-test
+          requires:
+            - approve-test
+      - deploy:
+          name: Deploy to test
+          requires:
+            - build-frontend-test
+
+      # Production environment workflow
+      - approve-prod:
+          type: approval
+          requires:
+            - install-dependencies
+            - run-unit-test
+      - build-frontend:
+          name: build-frontend-prod
+          requires:
+            - approve-prod
+      - deploy:
+          name: Deploy to prod
+          requires:
+            - build-frontend-prod
