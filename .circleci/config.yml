@@ -16,8 +16,9 @@ jobs:
           command: npm i
 
   run-unit-test:
-    - run:
-        command: echo This command will run unit test
+    steps:
+      - run:
+          command: echo This command will run unit test
 
   build-frontend:
     # Build node project
