@@ -35,7 +35,7 @@ jobs:
           path: ~/artifacts
           destination: node-build
 
-  deploy-dev:
+  deploy:
     # This is an example deploy job, not actually used by the workflow
     docker:
       - image: cimg/base:stable
@@ -44,16 +44,6 @@ jobs:
       - run:
           name: deploy
           command: "#e.g. ./deploy.sh"
-
-  deploy-prod:
-    # This is an example deploy job, not actually used by the workflow
-    docker:
-      - image: cimg/base:stable
-    steps:
-      # Replace this with steps to deploy to users
-      - run:
-        name: deploy
-        command: "#e.g. ./deploy.sh"
 
 workflows:
   build:
@@ -69,21 +59,6 @@ workflows:
           requires:
             - install-dependencies
             - approve-dev
-      - deploy-dev:
+      - deploy:
           requires:
             - install-dependencies
-            - build-frontend
-
-      # Production workflow
-      - approve-prod:
-          type: approval
-          requires:
-            - install-dependencies
-      - build-frontend:
-          requires:
-            - install-dependencies
-            - approve-prod
-      - deploy-prod:
-          requires:
-            - install-dependencies
-            - build-frontend
