@@ -15,6 +15,10 @@ jobs:
       - run:
           command: npm i
 
+  run-unit-test:
+    - run:
+        command: echo This command will run unit test
+
   build-frontend:
     # Build node project
     executor: node/default
@@ -49,12 +53,14 @@ workflows:
   build:
     jobs:
       - install-dependencies
+      - run-unit-test
 
       # Development workflow
       - approve-dev:
           type: approval
           requires:
             - install-dependencies
+            - run-unit-test
       - build-frontend:
           requires:
             - approve-dev
