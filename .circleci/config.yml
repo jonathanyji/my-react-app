@@ -1,10 +1,12 @@
 # This config was automatically generated from your source code
 # Stacks detected: deps:node:.
 version: 2.1
+
 orbs:
   node: circleci/node@5
+
 jobs:
-  build-project:
+  build-frontend:
     # Build node project
     executor: node/default
     steps:
@@ -23,6 +25,7 @@ jobs:
       - store_artifacts:
           path: ~/artifacts
           destination: node-build
+
   deploy:
     # This is an example deploy job, not actually used by the workflow
     docker:
@@ -31,11 +34,19 @@ jobs:
       # Replace this with steps to deploy to users
       - run:
           name: deploy
-          command: '#e.g. ./deploy.sh'
+          command: "#e.g. ./deploy.sh"
+
 workflows:
   build:
     jobs:
-      - build-project
-    # - deploy:
-    #     requires:
-    #       - build-node
+      - build-frontend
+
+      - approve-dev-app:
+          type: approval
+
+      - approve-prod-app:
+          type: approval
+
+      - deploy:
+          requires:
+            - build-frontend
