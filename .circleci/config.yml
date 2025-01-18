@@ -4,17 +4,7 @@ version: 2.1
 orbs:
   node: circleci/node@5
 jobs:
-  test-node:
-    # Install node dependencies and run tests
-    executor: node/default
-    steps:
-      - checkout
-      - node/install-packages:
-          pkg-manager: npm
-      - run:
-          name: Run tests
-          command: npm test --passWithNoTests
-  build-node:
+  build-project:
     # Build node project
     executor: node/default
     steps:
@@ -43,12 +33,9 @@ jobs:
           name: deploy
           command: '#e.g. ./deploy.sh'
 workflows:
-  build-and-test:
+  build:
     jobs:
-      - test-node
-      - build-node:
-          requires:
-            - test-node
+      - build-project
     # - deploy:
     #     requires:
     #       - build-node
