@@ -13,11 +13,15 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
+          name: Install dependencies
           command: npm i
 
   run-unit-test:
+    executor: node/default
     steps:
+      - checkout
       - run:
+          name: Run unit tests
           command: echo This command will run unit test
 
   build-frontend:
