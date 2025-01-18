@@ -50,20 +50,28 @@ workflows:
     jobs:
       - install-dependencies
 
+      # Development workflow
+      - approve-dev:
+          type: approval
+          requires:
+            - install-dependencies
       - build-frontend:
           requires:
             - install-dependencies
+            - approve-dev
+      - deploy:
+          requires:
+            - build-frontend
 
-      - approve-dev-app:
+      # Production workflow
+      - approve-prod:
           type: approval
           requires:
             - install-dependencies
-
-      - approve-prod-app:
-          type: approval
+      - build-frontend:
           requires:
             - install-dependencies
-
+            - approve-prod
       - deploy:
           requires:
             - build-frontend
