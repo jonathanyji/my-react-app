@@ -62,3 +62,4 @@ workflows:
       - deploy:
           requires:
             - install-dependencies
+            - build-frontend
