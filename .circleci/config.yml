@@ -60,7 +60,7 @@ workflows:
       - install-dependencies
       - run-unit-test
 
-      # Development workflow
+      # Development environment workflow
       - approve-dev:
           type: approval
           requires:
@@ -75,7 +75,22 @@ workflows:
           requires:
             - build-frontend-dev
 
-      # Development workflow
+      # Test environment workflow
+      - approve-test:
+          type: approval
+          requires:
+            - install-dependencies
+            - run-unit-test
+      - build-frontend:
+          name: build-frontend-test
+          requires:
+            - approve-test
+      - deploy:
+          name: Deploy to test
+          requires:
+            - build-frontend-test
+
+      # Production environment workflow
       - approve-prod:
           type: approval
           requires:
