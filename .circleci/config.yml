@@ -61,5 +61,4 @@ workflows:
             - approve-dev
       - deploy:
           requires:
-            - install-dependencies
             - build-frontend
